@@ -11,6 +11,8 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(120), nullable=False)
+    display_name = db.Column(db.String(100), default='')
+    bio_header = db.Column(db.String(200), default='')
     profile_photo_path = db.Column(db.String(200), default='')
     bio = db.Column(db.Text, default='')
     linkedin_url = db.Column(db.String(200), default='')

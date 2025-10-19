@@ -18,6 +18,20 @@
                     <form method="POST" enctype="multipart/form-data" novalidate>
                         {{ form.hidden_tag() }}
                         
+                        <!-- Display Name -->
+                        <div class="mb-3">
+                            {{ form.display_name.label(class="form-label") }}
+                            {{ form.display_name(class="form-control", placeholder="Your full name") }}
+                            <div class="form-text">This will be displayed next to your profile photo in the header</div>
+                        </div>
+                        
+                        <!-- Bio Header -->
+                        <div class="mb-3">
+                            {{ form.bio_header.label(class="form-label") }}
+                            {{ form.bio_header(class="form-control", placeholder="e.g., Software Engineer | Data Scientist") }}
+                            <div class="form-text">This large text appears above your bio on the homepage</div>
+                        </div>
+                        
                         <!-- Profile Photo -->
                         <div class="mb-4">
                             <label class="form-label">Current Profile Photo</label>

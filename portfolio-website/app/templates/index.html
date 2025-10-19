@@ -8,7 +8,7 @@
 <section class="bio-section text-center mb-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h1 class="display-4 mb-3">{{ user.username.title() if user.username else 'Welcome' }}</h1>
+            <h1 class="display-4 mb-3">{{ user.bio_header if user.bio_header else 'Welcome' }}</h1>
             {% if user.bio %}
             <p class="lead">{{ user.bio }}</p>
             {% else %}

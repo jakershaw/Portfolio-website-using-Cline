@@ -12,6 +12,8 @@ class LoginForm(FlaskForm):
 
 class ProfileForm(FlaskForm):
     """Edit profile information"""
+    display_name = StringField('Display Name', validators=[Length(max=100)])
+    bio_header = StringField('Bio Header', validators=[Length(max=200)])
     profile_photo = FileField('Profile Photo', validators=[
         FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!')
     ])

@@ -27,7 +27,10 @@ def save_file(file, folder=''):
         filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], folder, filename)
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         file.save(filepath)
-        return os.path.join('uploads', folder, filename)
+        
+        # Return path with forward slashes for web compatibility
+        web_path = os.path.join('uploads', folder, filename).replace('\\', '/')
+        return web_path
     return None
 
 
@@ -105,13 +108,15 @@ def edit_profile():
     form = ProfileForm()
     
     if form.validate_on_submit():
+        current_user.display_name = form.display_name.data
+        current_user.bio_header = form.bio_header.data
         current_user.bio = form.bio.data
         current_user.email = form.email.data
         current_user.linkedin_url = form.linkedin_url.data
         current_user.github_url = form.github_url.data
         
         # Handle profile photo upload
-        if form.profile_photo.data:
+        if form.profile_photo.data and hasattr(form.profile_photo.data, 'filename') and form.profile_photo.data.filename:
             photo_path = save_file(form.profile_photo.data, 'profile')
             if photo_path:
                 current_user.profile_photo_path = photo_path
@@ -121,6 +126,8 @@ def edit_profile():
         return redirect(url_for('main.edit_profile'))
     
     # Pre-populate form
+    form.display_name.data = current_user.display_name
+    form.bio_header.data = current_user.bio_header
     form.bio.data = current_user.bio
     form.email.data = current_user.email
     form.linkedin_url.data = current_user.linkedin_url
@@ -145,7 +152,7 @@ def new_project():
         )
         
         # Handle image upload
-        if form.image.data:
+        if form.image.data and hasattr(form.image.data, 'filename') and form.image.data.filename:
             image_path = save_file(form.image.data, 'projects')
             if image_path:
                 project.image_path = image_path
@@ -176,7 +183,7 @@ def edit_project(id):
         project.published = form.published.data
         
         # Handle image upload
-        if form.image.data:
+        if form.image.data and hasattr(form.image.data, 'filename') and form.image.data.filename:
             image_path = save_file(form.image.data, 'projects')
             if image_path:
                 project.image_path = image_path
