@@ -1,0 +1,116 @@
+==========================================
+PORTFOLIO WEBSITE - QUICK START GUIDE
+==========================================
+
+⭐ EASIEST METHOD (RECOMMENDED) ⭐
+===================================
+
+Simply double-click the file:
+
+    start.bat
+
+It's in the portfolio-website folder. This will automatically:
+- Activate the virtual environment
+- Start the Flask server
+- Show you the URL and login credentials
+
+Then open your browser and go to: http://localhost:5000
+
+Login with:
+- Username: admin
+- Password: ChangeThisPassword123!
+
+Keep the window open while using the website!
+
+==========================================
+
+ALTERNATIVE METHOD (Manual Steps)
+===================================
+
+Follow these steps to start your portfolio website:
+
+STEP 1: Open Command Prompt or PowerShell
+------------------------------------------
+- Press Windows Key + R
+- Type: cmd
+- Press Enter
+
+
+STEP 2: Navigate to the Project Directory
+------------------------------------------
+Copy and paste this command:
+
+cd "C:\Users\james\OneDrive\1. Documents\5. Personal Projects\2. Data Science\Test-Repo\portfolio-website"
+
+
+STEP 3: Activate Virtual Environment
+-------------------------------------
+Copy and paste this command:
+
+venv\Scripts\activate
+
+You should see (venv) appear in your command prompt.
+
+
+STEP 4: Start the Flask Server
+-------------------------------
+Copy and paste this command:
+
+python run.py
+
+You should see output like:
+ * Running on http://127.0.0.1:5000
+ * Running on http://localhost:5000
+
+
+STEP 5: Open Your Browser
+--------------------------
+Open your web browser and go to:
+
+http://localhost:5000
+
+or
+
+http://127.0.0.1:5000
+
+
+STEP 6: Login
+-------------
+Username: admin
+Password: ChangeThisPassword123!
+
+
+TROUBLESHOOTING
+===============
+
+Issue: "python is not recognized"
+Solution: Make sure Python is installed. Try: py run.py instead
+
+
+Issue: "No module named flask"
+Solution: Make sure virtual environment is activated (step 3)
+Then run: pip install -r requirements.txt
+
+
+Issue: "Port already in use"
+Solution: Another program is using port 5000.
+Edit run.py and change the last line to:
+    app.run(debug=True, port=5001)
+Then use http://localhost:5001
+
+
+Issue: Database error
+Solution: Delete portfolio.db file and run:
+    flask init-db
+
+
+TO STOP THE SERVER
+==================
+Press Ctrl+C in the command prompt window
+
+
+IMPORTANT NOTES
+===============
+- Keep the command prompt window open while using the website
+- The server must be running to access the website
+- Don't close the terminal until you're done using the website
