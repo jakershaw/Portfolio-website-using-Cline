@@ -8,7 +8,7 @@ body {
 
 main {
     flex: 1;
-    margin-top: 110px !important;
+    margin-top: 100px !important;
 }
 
 /* Header Bar */
@@ -28,37 +28,34 @@ main {
     height: 70px;
 }
 
-.header-bar .col-4 {
+.header-bar .col-8 {
     display: flex;
     align-items: center;
 }
 
-.header-bar .col-4.text-center {
-    justify-content: center;
-}
-
 .header-bar .col-4.text-end {
+    display: flex;
+    align-items: center;
     justify-content: flex-end;
 }
 
 /* Profile Photo */
 .profile-photo {
-    width: 160px;
-    height: 160px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid #0d6efd;
     position: absolute;
     top: 5px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 15px;
     z-index: 1001;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 .profile-photo-placeholder {
-    width: 160px;
-    height: 160px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     background: #e9ecef;
     display: flex;
@@ -67,18 +64,17 @@ main {
     border: 4px solid #6c757d;
     position: absolute;
     top: 5px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 15px;
     z-index: 1001;
 }
 
 /* Profile Name */
 .profile-name {
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-size: 1.6rem;
+    font-weight: bold;
     color: #2c3e50;
     white-space: nowrap;
-    margin-left: 1rem;
+    margin-left: 185px;
 }
 
 .profile-photo-large {
