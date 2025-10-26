@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed
+from flask_wtf.file import FileField, FileAllowed, MultipleFileField
 from wtforms import StringField, PasswordField, TextAreaField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Length, URL, Optional
 
@@ -31,6 +31,9 @@ class ProjectForm(FlaskForm):
     content = TextAreaField('Project Content (Markdown supported)', validators=[DataRequired()])
     github_url = StringField('GitHub Repository URL', validators=[Optional(), URL()])
     image = FileField('Project Image', validators=[
+        FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!')
+    ])
+    content_images = MultipleFileField('Content Images', validators=[
         FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!')
     ])
     published = BooleanField('Published')

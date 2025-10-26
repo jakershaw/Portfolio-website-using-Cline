@@ -13,93 +13,57 @@
                 </a>
             </div>
             
+            <!-- Main Project Form -->
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" enctype="multipart/form-data" novalidate>
+                    <form method="POST" enctype="multipart/form-data">
                         {{ form.hidden_tag() }}
                         
-                        <!-- Title -->
                         <div class="mb-3">
                             {{ form.title.label(class="form-label") }}
-                            {{ form.title(class="form-control form-control-lg" + (" is-invalid" if form.title.errors else "")) }}
-                            {% if form.title.errors %}
-                                <div class="invalid-feedback">
-                                    {% for error in form.title.errors %}{{ error }}{% endfor %}
-                                </div>
-                            {% endif %}
+                            {{ form.title(class="form-control form-control-lg") }}
                         </div>
                         
-                        <!-- Description -->
                         <div class="mb-3">
                             {{ form.description.label(class="form-label") }}
-                            {{ form.description(class="form-control" + (" is-invalid" if form.description.errors else "")) }}
-                            {% if form.description.errors %}
-                                <div class="invalid-feedback">
-                                    {% for error in form.description.errors %}{{ error }}{% endfor %}
-                                </div>
-                            {% endif %}
+                            {{ form.description(class="form-control") }}
                             <div class="form-text">Brief description for the project card</div>
                         </div>
                         
-                        <!-- Content -->
                         <div class="mb-3">
                             {{ form.content.label(class="form-label") }}
-                            {{ form.content(class="form-control" + (" is-invalid" if form.content.errors else ""), rows=15) }}
-                            {% if form.content.errors %}
-                                <div class="invalid-feedback">
-                                    {% for error in form.content.errors %}{{ error }}{% endfor %}
-                                </div>
-                            {% endif %}
-                            <div class="form-text">
-                                Full project details. Supports Markdown formatting:
-                                <ul class="mb-0 mt-2">
-                                    <li><code># Heading</code> for headings</li>
-                                    <li><code>**bold**</code> for bold text</li>
-                                    <li><code>*italic*</code> for italic text</li>
-                                    <li><code>- item</code> for bullet lists</li>
-                                    <li><code>[link text](url)</code> for links</li>
-                                </ul>
-                            </div>
+                            {{ form.content(class="form-control", rows=15) }}
+                            <div class="form-text">Supports Markdown: <code># Heading</code>, <code>**bold**</code>, <code>*italic*</code>, <code>![img](url)</code></div>
                         </div>
                         
-                        <!-- GitHub URL -->
                         <div class="mb-3">
                             {{ form.github_url.label(class="form-label") }}
-                            {{ form.github_url(class="form-control" + (" is-invalid" if form.github_url.errors else ""), placeholder="https://github.com/username/repository") }}
-                            {% if form.github_url.errors %}
-                                <div class="invalid-feedback">
-                                    {% for error in form.github_url.errors %}{{ error }}{% endfor %}
-                                </div>
-                            {% endif %}
+                            {{ form.github_url(class="form-control", placeholder="https://github.com/username/repository") }}
                         </div>
                         
-                        <!-- Image -->
                         <div class="mb-3">
                             {% if project and project.image_path %}
                             <label class="form-label">Current Image</label>
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <img src="{{ url_for('static', filename=project.image_path) }}" 
                                      alt="{{ project.title }}" class="img-thumbnail" style="max-width: 300px;">
                             </div>
                             {% endif %}
                             {{ form.image.label(class="form-label") }}
                             {{ form.image(class="form-control") }}
-                            <div class="form-text">
-                                {% if project and project.image_path %}
-                                Upload a new image to replace the current one
-                                {% else %}
-                                Upload an image for this project (JPG, PNG, or GIF)
-                                {% endif %}
-                            </div>
                         </div>
                         
-                        <!-- Published -->
+                        <div class="mb-3">
+                            {{ form.content_images.label(class="form-label") }}
+                            {{ form.content_images(class="form-control", multiple=true) }}
+                            <div class="form-text">Upload images to embed in your content</div>
+                        </div>
+                        
                         <div class="mb-4">
                             <div class="form-check">
                                 {{ form.published(class="form-check-input") }}
                                 {{ form.published.label(class="form-check-label") }}
                             </div>
-                            <div class="form-text">Uncheck to save as draft (not visible to visitors)</div>
                         </div>
                         
                         <div class="d-grid">
@@ -108,6 +72,45 @@
                     </form>
                 </div>
             </div>
+            
+            <!-- Existing Content Images -->
+            {% if project %}
+            {% set content_imgs = project.content_images|from_json %}
+            {% if content_imgs and content_imgs|length > 0 %}
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-images"></i> Content Images ({{ content_imgs|length }})</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-3"><i class="fas fa-info-circle"></i> Click to select, then copy (Ctrl+C)</p>
+                    {% for img_path in content_imgs %}
+                    <div class="card mb-3 bg-light">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-2 text-center">
+                                    <img src="{{ url_for('static', filename=img_path) }}" 
+                                         alt="Content image" class="img-thumbnail" style="max-height: 80px;">
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control font-monospace" 
+                                           value="![Image description]({{ url_for('static', filename=img_path) }})" 
+                                           readonly onclick="this.select();">
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <a href="{{ url_for('main.delete_content_image', project_id=project.id, image_path=img_path) }}" 
+                                       class="btn btn-danger btn-sm"
+                                       onclick="return confirm('Remove this image? This cannot be undone.');">
+                                        <i class="fas fa-trash"></i> Remove
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            {% endif %}
         </div>
     </div>
 </section>

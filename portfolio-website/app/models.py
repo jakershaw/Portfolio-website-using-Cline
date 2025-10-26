@@ -40,6 +40,7 @@ class Project(db.Model):
     content = db.Column(db.Text, nullable=False)  # Markdown content
     github_url = db.Column(db.String(200), default='')
     image_path = db.Column(db.String(200), default='')
+    content_images = db.Column(db.Text, default='[]')  # JSON array of content image paths
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     published = db.Column(db.Boolean, default=True)

@@ -1,3 +1,4 @@
+import json
 from flask import Flask
 from flask_login import LoginManager
 from flask_migrate import Migrate
@@ -24,6 +25,17 @@ def create_app(config_class=Config):
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
+    
+    # Register custom Jinja2 filters
+    @app.template_filter('from_json')
+    def from_json_filter(value):
+        """Parse JSON string to Python object"""
+        if not value:
+            return []
+        try:
+            return json.loads(value)
+        except (json.JSONDecodeError, TypeError):
+            return []
     
     # Register blueprints
     from app.routes import main

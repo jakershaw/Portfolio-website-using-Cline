@@ -14,33 +14,70 @@
 </head>
 <body>
     <!-- Header Bar -->
+    <!---
     <header class="header-bar">
-        <div class="container" style="height: 100%;">
-            <div class="row align-items-center" style="height: 100%;">
-                <div class="col-8" style="position: relative;">
-                    {% if user and user.profile_photo_path %}
-                    <img src="{{ url_for('static', filename=user.profile_photo_path) }}" 
-                         alt="Profile Photo" class="profile-photo">
-                    {% else %}
-                    <div class="profile-photo-placeholder">
-                        <i class="fas fa-user fa-3x"></i>
+        <div class="container">
+            <div class="row">
+                    <div class="col-4 text-start">
+                         {% if user.display_name %}<span class="profile-name">{{ user.display_name }}</span>
+                         {% endif %}
                     </div>
-                    {% endif %}
-                    {% if user and user.display_name %}
-                    <span class="profile-name">{{ user.display_name }}</span>
-                    {% endif %}
-                </div>
-                <div class="col-4 text-end">
-                    <a href="{{ url_for('main.index') }}" class="text-decoration-none text-dark me-3">
-                        <i class="fas fa-home"></i> Home
-                    </a>
-                    {% if user %}
-                    <a href="{{ url_for('main.about') }}" class="text-decoration-none text-dark">
-                        <i class="fas fa-user"></i> About
-                    </a>
-                    {% endif %}
-                </div>
+
+                     <div class="col-4 d-flex justify-content-center">
+                        {% if user.profile_photo_path %}
+                        <img src="{{ url_for('static', filename=user.profile_photo_path) }}" 
+                            alt="Profile Photo" class="profile-photo">
+                        {% else %}
+                        <div class="profile-photo-placeholder">
+                            <i class="fas fa-user fa-3x"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-4 d-flex align-items-center justify-content-end">
+                        <a href="{{ url_for('main.index') }}" class="text-decoration-none text-dark me-3">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                        {% if user %}
+                        <a href="{{ url_for('main.about') }}" class="text-decoration-none text-dark">
+                            <i class="fas fa-user"></i> About
+                        </a>
+                        {% endif %}
+                    </div>
             </div>
+        </div>
+    </header>
+    --->
+    <header class="header-bar">
+        <div class="container">
+            <!-- Left: Name -->
+            <div class="header-name">
+                {% if user.display_name %}
+                <span class="profile-name">{{ user.display_name }}</span>
+                {% endif %}
+            </div>
+
+            <!-- Right: Links -->
+            <div class="header-links">
+                <a href="{{ url_for('main.index') }}">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                {% if user %}
+                <a href="{{ url_for('main.about') }}">
+                    <i class="fas fa-user"></i> About
+                </a>
+                {% endif %}
+            </div>
+
+            <!-- Middle: Profile photo (absolute position) -->
+            {% if user.profile_photo_path %}
+            <img src="{{ url_for('static', filename=user.profile_photo_path) }}" 
+                alt="Profile Photo" class="profile-photo">
+            {% else %}
+            <div class="profile-photo-placeholder profile-photo">
+                <i class="fas fa-user fa-3x"></i>
+            </div>
+            {% endif %}
         </div>
     </header>
 
