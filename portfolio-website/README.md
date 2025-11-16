@@ -227,19 +227,38 @@ Ensure virtual environment is activated and dependencies installed:
 pip install -r requirements.txt
 ```
 
-## Future Deployment
+## Deployment
 
-When ready to deploy online, consider these free options:
+### Deploy to Render (Recommended)
 
-1. **PythonAnywhere** (Free tier available)
-2. **Render.com** (Free tier available)
+This project is ready for deployment to Render with PostgreSQL database support. See the **[RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md)** guide for complete instructions.
+
+**What's included for Render:**
+- ✅ PostgreSQL configuration
+- ✅ Automated database initialization
+- ✅ Build script (`build.sh`)
+- ✅ Deployment configuration (`render.yaml`)
+- ✅ Production-ready setup with Gunicorn
+
+**Quick Start:**
+1. Push code to GitHub
+2. Create a Blueprint in Render using `render.yaml`
+3. Set environment variables (admin credentials)
+4. Deploy! Database tables are created automatically
+
+### Other Deployment Options
+
+When ready to deploy online, consider these alternatives:
+
+1. **Render.com** (Free tier available) - **Recommended, see guide above**
+2. **PythonAnywhere** (Free tier available)
 3. **Railway** (Free tier with limits)
 
-For production:
+For production deployments:
 - Set `FLASK_ENV=production` in `.env`
-- Use a production WSGI server (Gunicorn)
-- Consider upgrading to PostgreSQL
-- Use environment-specific configuration
+- Use PostgreSQL for persistent data
+- Use a production WSGI server (Gunicorn - already included)
+- Set environment-specific configuration
 
 ## License
 
