@@ -3,7 +3,7 @@ services:
     name: portfolio-website
     env: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn wsgi:app"
+    startCommand: "gunicorn wsgi:app -w 1 -b 0.0.0.0:$PORT --timeout 120"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
