@@ -5,3 +5,4 @@ Flask-Migrate==4.0.5
 Flask-WTF==1.2.1
 python-dotenv==1.0.0
 markdown2==2.4.12
+gunicorn

@@ -25,6 +25,7 @@ instance/
 # Uploaded files
 app/static/uploads/*
 !app/static/uploads/.gitkeep
+project_post/
 
 # IDE
 .vscode/
