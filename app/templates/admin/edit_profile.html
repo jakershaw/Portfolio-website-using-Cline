@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile - Portfolio{% endblock %}
+
+{% block content %}
+<section class="edit-profile">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Edit Profile</h1>
+                <a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" novalidate>
+                        {{ form.hidden_tag() }}
+                        
+                        <!-- Display Name -->
+                        <div class="mb-3">
+                            {{ form.display_name.label(class="form-label") }}
+                            {{ form.display_name(class="form-control", placeholder="Your full name") }}
+                            <div class="form-text">This will be displayed next to your profile photo in the header</div>
+                        </div>
+                        
+                        <!-- Bio Header -->
+                        <div class="mb-3">
+                            {{ form.bio_header.label(class="form-label") }}
+                            {{ form.bio_header(class="form-control", placeholder="e.g., Software Engineer | Data Scientist") }}
+                            <div class="form-text">This large text appears above your bio on the homepage</div>
+                        </div>
+                        
+                        <!-- Profile Photo -->
+                        <div class="mb-4">
+                            <label class="form-label">Current Profile Photo</label>
+                            <div class="mb-3">
+                                {% if current_user.profile_photo_path %}
+                                <img src="{{ url_for('static', filename=current_user.profile_photo_path) }}" 
+                                     alt="Profile Photo" class="profile-photo-large">
+                                {% else %}
+                                <div class="text-muted">No photo uploaded</div>
+                                {% endif %}
+                            </div>
+                            {{ form.profile_photo.label(class="form-label") }}
+                            {{ form.profile_photo(class="form-control") }}
+                            <div class="form-text">Upload a new photo to replace the current one (JPG, PNG, or GIF)</div>
+                        </div>
+                        
+                        <!-- Bio -->
+                        <div class="mb-3">
+                            {{ form.bio.label(class="form-label") }}
+                            {{ form.bio(class="form-control", rows=6) }}
+                            <div class="form-text">This brief bio appears on the homepage</div>
+                        </div>
+                        
+                        <!-- About Page Text -->
+                        <div class="mb-3">
+                            {{ form.about_text.label(class="form-label") }}
+                            {{ form.about_text(class="form-control", rows=10) }}
+                            <div class="form-text">This full text appears on the About page. You can include YouTube URLs (https://www.youtube.com/watch?v=VIDEO_ID) and they will be automatically embedded.</div>
+                        </div>
+                        
+                        <!-- Email -->
+                        <div class="mb-3">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else "")) }}
+                            {% if form.email.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.email.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">This will be displayed in the footer</div>
+                        </div>
+                        
+                        <!-- LinkedIn URL -->
+                        <div class="mb-3">
+                            {{ form.linkedin_url.label(class="form-label") }}
+                            {{ form.linkedin_url(class="form-control" + (" is-invalid" if form.linkedin_url.errors else ""), placeholder="https://linkedin.com/in/yourprofile") }}
+                            {% if form.linkedin_url.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.linkedin_url.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- GitHub URL -->
+                        <div class="mb-3">
+                            {{ form.github_url.label(class="form-label") }}
+                            {{ form.github_url(class="form-control" + (" is-invalid" if form.github_url.errors else ""), placeholder="https://github.com/yourusername") }}
+                            {% if form.github_url.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.github_url.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,261 @@
+/* Base Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+    margin-top: 110px !important; /* Space for fixed header */
+    padding-top: 180px;
+}
+
+/* Header Bar - Half Height */
+
+.header-bar {
+    height: 90px;               /* fixed header height */
+    display: flex;               /* flex container for direct children */
+    align-items: center;         /* vertically center everything */
+    background: #fff;
+    border-bottom: 2px solid #e9ecef;
+    padding: 0 1rem;
+    position: fixed;             /* Make header sticky */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header-bar .container {
+    display: flex;
+    align-items: center;        /* vertical centering inside container */
+    justify-content: space-between; /* space between LHS and RHS */
+    width: 100%;
+}
+
+.profile-name {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #2c3e50;
+    transition: color 0.2s;
+}
+
+.header-name a:hover .profile-name {
+    color: #0d6efd;
+}
+
+.profile-photo-link {
+    /* Position for the link wrapper */
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001;
+    text-decoration: none;
+}
+
+.profile-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #0d6efd;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.profile-photo-link:hover .profile-photo {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.header-links {
+    display: flex;           /* make the links horizontal */
+    flex-direction: row;     /* optional, row is default */
+    align-items: center;     /* vertically center links */
+    gap: 1rem;               /* space between Home and About */
+}
+
+.header-links a {
+    text-decoration: none;
+    color: #212529;
+}
+
+
+.profile-photo-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+}
+
+.profile-photo-placeholder i {
+    font-size: 1.8rem;
+}
+
+/* Navigation Links */
+.header-bar .col-4 a {
+    font-weight: 500;
+}
+
+/* Bio Section */
+.bio-section {
+    padding-top: 2rem;
+}
+
+/* Project Cards */
+.project-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.project-card .card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Make entire project card clickable */
+a.text-decoration-none .project-card {
+    color: inherit;
+}
+
+a.text-decoration-none .project-card .card-title {
+    color: #212529;
+}
+
+a.text-decoration-none .project-card .card-text {
+    color: #6c757d;
+}
+
+a.text-decoration-none:hover .project-card .card-title {
+    color: #0d6efd;
+}
+
+/* Project Content (Markdown) */
+.project-content h1 {
+    font-size: 2rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.project-content h2 {
+    font-size: 1.5rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.project-content h3 {
+    font-size: 1.25rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.project-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+}
+
+.project-content code {
+    background: #f8f9fa;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+}
+
+.project-content pre {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+
+/* Bullet points and lists */
+.project-content ul,
+.project-content ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+.project-content ul li {
+    list-style-type: disc;
+    margin-bottom: 0.5rem;
+}
+
+.project-content ol li {
+    list-style-type: decimal;
+    margin-bottom: 0.5rem;
+}
+
+.project-content ul ul li {
+    list-style-type: circle;
+}
+
+.project-content ul ul ul li {
+    list-style-type: square;
+}
+
+/* Footer */
+.footer {
+    margin-top: auto;
+    position: sticky;
+    bottom: 0;
+    z-index: 999;
+}
+
+.footer-links a {
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.footer-links a:hover {
+    color: #0d6efd !important;
+}
+
+/* YouTube Embeds */
+.youtube-embed {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    margin: 2rem 0;
+}
+
+.youtube-embed iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .profile-photo,
+    .profile-photo-placeholder {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .profile-photo-placeholder i {
+        font-size: 1.5rem;
+    }
+    
+    .profile-name {
+        font-size: 1rem;
+    }
+    
+    main {
+        margin-top: 100px !important;
+    }
+}

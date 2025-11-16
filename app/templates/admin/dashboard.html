@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Portfolio{% endblock %}
+
+{% block content %}
+<section class="admin-dashboard">
+    <h1 class="mb-4">Admin Dashboard</h1>
+    
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-user"></i> Profile</h5>
+                    <p class="card-text">Update your profile photo, bio, and social links.</p>
+                    <a href="{{ url_for('main.edit_profile') }}" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-plus"></i> New Project</h5>
+                    <p class="card-text">Add a new project to your portfolio.</p>
+                    <a href="{{ url_for('main.new_project') }}" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Create Project
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Projects List -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-folder"></i> Your Projects ({{ projects|length }})</h5>
+        </div>
+        <div class="card-body">
+            {% if projects %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for project in projects %}
+                        <tr>
+                            <td>
+                                <strong>{{ project.title }}</strong><br>
+                                <small class="text-muted">{{ project.description[:50] }}...</small>
+                            </td>
+                            <td>
+                                {% if project.published %}
+                                <span class="badge bg-success">Published</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Draft</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ project.created_at.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                <a href="{{ url_for('main.project', id=project.id) }}" class="btn btn-sm btn-info" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ url_for('main.edit_project', id=project.id) }}" class="btn btn-sm btn-primary" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-4">
+                <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                <p class="text-muted">No projects yet. <a href="{{ url_for('main.new_project') }}">Create your first project</a></p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
