@@ -25,7 +25,12 @@ instance/
 # Uploaded files
 app/static/uploads/*
 !app/static/uploads/.gitkeep
+
+# Local data and project files (not for Git)
 project_post/
+data/
+backup_untracked/
+portfolio-website/
 
 # IDE
 .vscode/

@@ -143,7 +143,7 @@ The website will be available at: `http://localhost:5000`
 Run the backup script anytime:
 
 ```bash
-python backup.py
+python scripts/backup.py
 ```
 
 This creates timestamped backups of:
@@ -161,8 +161,8 @@ Backups are stored in the `backups/` folder and automatically cleaned up after 3
 ## Project Structure
 
 ```
-portfolio-website/
-├── app/
+Portfolio-website-using-Cline/
+├── app/                     # Flask application
 │   ├── __init__.py          # App initialization
 │   ├── models.py            # Database models
 │   ├── routes.py            # URL routes
@@ -172,16 +172,33 @@ portfolio-website/
 │   │   ├── js/              # JavaScript
 │   │   └── uploads/         # Uploaded images
 │   └── templates/           # HTML templates
-├── migrations/              # Database migrations
-├── backups/                 # Backup files (not in Git)
+│       └── admin/           # Admin panel templates
+│
+├── docs/                    # Documentation
+│   ├── RENDER_DEPLOYMENT.md
+│   ├── DEPLOYMENT_FIXES.md
+│   ├── ARCHITECTURE_DIAGRAM.md
+│   ├── BEGINNER_TUTORIAL.md
+│   └── ... (other docs)
+│
+├── scripts/                 # Utility scripts
+│   ├── migrations/          # Database migration scripts
+│   ├── backup.py            # Backup utility
+│   ├── check_db.py          # Database checker
+│   └── start*.py/bat        # Development launchers
+│
+├── instance/                # Database files (not in Git)
 ├── .env                     # Environment variables (not in Git)
 ├── .env.example             # Environment template
-├── .gitignore              # Git ignore rules
-├── backup.py               # Backup script
-├── config.py               # Configuration
-├── requirements.txt        # Python dependencies
-├── run.py                  # Application entry point
-└── README.md               # This file
+├── .gitignore               # Git ignore rules
+├── config.py                # Configuration
+├── wsgi.py                  # WSGI entry point
+├── init_db.py               # Database initialization
+├── build.sh                 # Render build script
+├── render.yaml              # Render deployment config
+├── requirements.txt         # Python dependencies
+├── run.py                   # Local dev server
+└── README.md                # This file
 ```
 
 ## Security Best Practices
@@ -231,7 +248,7 @@ pip install -r requirements.txt
 
 ### Deploy to Render (Recommended)
 
-This project is ready for deployment to Render with PostgreSQL database support. See the **[RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md)** guide for complete instructions.
+This project is ready for deployment to Render with PostgreSQL database support. See the **[RENDER_DEPLOYMENT.md](docs/20251116_RENDER_DEPLOYMENT.md)** guide for complete instructions.
 
 **What's included for Render:**
 - ✅ PostgreSQL configuration
