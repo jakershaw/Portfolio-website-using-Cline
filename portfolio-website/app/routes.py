@@ -1,13 +1,52 @@
 import os
 import json
+import re
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_user, logout_user, login_required, current_user
+from markupsafe import Markup
 from werkzeug.utils import secure_filename
 from app.models import db, User, Project
 from app.forms import LoginForm, ProfileForm, ProjectForm
 import markdown2
 
 main = Blueprint('main', __name__)
+
+
+def convert_bullets_to_markdown(text):
+    """
+    Text passes through as-is since we use standard Markdown.
+    Note: When pasting from Word into a web browser, tabs and special 
+    formatting are automatically stripped by the browser.
+    """
+    return text
+
+
+def embed_youtube_videos(text):
+    """
+    Convert YouTube URLs to embedded iframes.
+    Supports URLs like: https://www.youtube.com/watch?v=VIDEO_ID
+    """
+    if not text:
+        return text
+    
+    # Pattern to match YouTube URLs
+    youtube_pattern = r'https?://(?:www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)'
+    
+    def replace_with_iframe(match):
+        video_id = match.group(1)
+        iframe = f'''<div class="youtube-embed">
+    <iframe width="560" height="315" 
+            src="https://www.youtube.com/embed/{video_id}" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+    </iframe>
+</div>'''
+        return iframe
+    
+    # Replace YouTube URLs with iframes
+    result = re.sub(youtube_pattern, replace_with_iframe, text)
+    return Markup(result)
 
 
 def allowed_file(filename):
@@ -48,7 +87,9 @@ def index():
 def about():
     """About/Resume page"""
     user = User.query.first()
-    return render_template('about.html', user=user)
+    # Process about_text to embed YouTube videos
+    about_html = embed_youtube_videos(user.about_text) if user and user.about_text else ''
+    return render_template('about.html', user=user, about_html=about_html)
 
 
 @main.route('/project/<int:id>')
@@ -57,8 +98,14 @@ def project(id):
     user = User.query.first()
     project = Project.query.get_or_404(id)
     
-    # Convert markdown to HTML, handle empty content
-    project_html = markdown2.markdown(project.content) if project.content else ''
+    # Convert various bullet formats to markdown, then convert to HTML
+    if project.content:
+        converted_content = convert_bullets_to_markdown(project.content)
+        project_html = markdown2.markdown(converted_content)
+        # Embed YouTube videos in project content
+        project_html = embed_youtube_videos(project_html)
+    else:
+        project_html = ''
     
     return render_template('project.html', user=user, project=project, project_html=project_html)
 
@@ -70,18 +117,18 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('main.admin_dashboard'))
     
+    user = User.query.first()
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user)
+        user_account = User.query.filter_by(username=form.username.data).first()
+        if user_account and user_account.check_password(form.password.data):
+            login_user(user_account)
             next_page = request.args.get('next')
-            flash('Logged in successfully!', 'success')
             return redirect(next_page) if next_page else redirect(url_for('main.admin_dashboard'))
         else:
             flash('Invalid username or password', 'danger')
     
-    return render_template('login.html', form=form)
+    return render_template('login.html', user=user, form=form)
 
 
 @main.route('/logout')
@@ -89,7 +136,6 @@ def login():
 def logout():
     """Logout"""
     logout_user()
-    flash('Logged out successfully', 'info')
     return redirect(url_for('main.index'))
 
 
@@ -98,20 +144,23 @@ def logout():
 @login_required
 def admin_dashboard():
     """Admin dashboard"""
+    user = User.query.first()
     projects = Project.query.order_by(Project.created_at.desc()).all()
-    return render_template('admin/dashboard.html', projects=projects)
+    return render_template('admin/dashboard.html', user=user, projects=projects)
 
 
 @main.route('/admin/profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
     """Edit profile information"""
+    user = User.query.first()
     form = ProfileForm()
     
     if form.validate_on_submit():
         current_user.display_name = form.display_name.data
         current_user.bio_header = form.bio_header.data
         current_user.bio = form.bio.data
+        current_user.about_text = form.about_text.data
         current_user.email = form.email.data
         current_user.linkedin_url = form.linkedin_url.data
         current_user.github_url = form.github_url.data
@@ -123,24 +172,25 @@ def edit_profile():
                 current_user.profile_photo_path = photo_path
         
         db.session.commit()
-        flash('Profile updated successfully!', 'success')
         return redirect(url_for('main.edit_profile'))
     
     # Pre-populate form
     form.display_name.data = current_user.display_name
     form.bio_header.data = current_user.bio_header
     form.bio.data = current_user.bio
+    form.about_text.data = current_user.about_text
     form.email.data = current_user.email
     form.linkedin_url.data = current_user.linkedin_url
     form.github_url.data = current_user.github_url
     
-    return render_template('admin/edit_profile.html', form=form)
+    return render_template('admin/edit_profile.html', user=user, form=form)
 
 
 @main.route('/admin/project/new', methods=['GET', 'POST'])
 @login_required
 def new_project():
     """Create new project"""
+    user = User.query.first()
     form = ProjectForm()
     
     if form.validate_on_submit():
@@ -171,19 +221,19 @@ def new_project():
         
         db.session.add(project)
         db.session.commit()
-        flash('Project created successfully!', 'success')
-        return redirect(url_for('main.admin_dashboard'))
+        return redirect(url_for('main.project', id=project.id))
     
     # Set published to True by default
     form.published.data = True
     
-    return render_template('admin/project_form.html', form=form, title='New Project')
+    return render_template('admin/project_form.html', user=user, form=form, title='New Project')
 
 
 @main.route('/admin/project/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_project(id):
     """Edit existing project"""
+    user = User.query.first()
     project = Project.query.get_or_404(id)
     form = ProjectForm()
     
@@ -218,8 +268,7 @@ def edit_project(id):
             project.content_images = json.dumps(existing_images)
         
         db.session.commit()
-        flash('Project updated successfully!', 'success')
-        return redirect(url_for('main.admin_dashboard'))
+        return redirect(url_for('main.project', id=project.id))
     
     # Pre-populate form only on GET request
     if request.method == 'GET':
@@ -231,7 +280,7 @@ def edit_project(id):
     
     # Always pass fresh project data from database
     db.session.refresh(project)
-    return render_template('admin/project_form.html', form=form, title='Edit Project', project=project)
+    return render_template('admin/project_form.html', user=user, form=form, title='Edit Project', project=project)
 
 
 @main.route('/admin/project/<int:id>/delete', methods=['POST'])
@@ -241,7 +290,6 @@ def delete_project(id):
     project = Project.query.get_or_404(id)
     db.session.delete(project)
     db.session.commit()
-    flash('Project deleted successfully!', 'success')
     return redirect(url_for('main.admin_dashboard'))
 
 
@@ -269,11 +317,11 @@ def delete_content_image(project_id, image_path):
             except Exception as e:
                 print(f"Could not delete file: {e}")
             
-            flash('Image removed successfully!', 'success')
+            pass
         else:
-            flash('Image not found', 'warning')
+            pass
     except Exception as e:
-        flash(f'Error removing image: {str(e)}', 'danger')
+        pass
     
     return redirect(url_for('main.edit_project', id=project_id))
 

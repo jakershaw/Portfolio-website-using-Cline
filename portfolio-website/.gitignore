@@ -39,3 +39,5 @@ Thumbs.db
 # Backups
 backups/
 *.backup
+
+../Project post/

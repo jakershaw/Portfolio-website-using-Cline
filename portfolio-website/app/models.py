@@ -17,6 +17,7 @@ class User(UserMixin, db.Model):
     bio = db.Column(db.Text, default='')
     linkedin_url = db.Column(db.String(200), default='')
     github_url = db.Column(db.String(200), default='')
+    about_text = db.Column(db.Text, default='')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     

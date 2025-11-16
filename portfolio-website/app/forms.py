@@ -18,6 +18,7 @@ class ProfileForm(FlaskForm):
         FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!')
     ])
     bio = TextAreaField('Bio', validators=[Length(max=2000)])
+    about_text = TextAreaField('About Page Text', validators=[Length(max=5000)])
     email = StringField('Email', validators=[DataRequired(), Length(max=120)])
     linkedin_url = StringField('LinkedIn URL', validators=[Optional(), URL()])
     github_url = StringField('GitHub URL', validators=[Optional(), URL()])

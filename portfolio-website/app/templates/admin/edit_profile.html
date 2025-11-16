@@ -52,7 +52,14 @@
                         <div class="mb-3">
                             {{ form.bio.label(class="form-label") }}
                             {{ form.bio(class="form-control", rows=6) }}
-                            <div class="form-text">Tell visitors about yourself</div>
+                            <div class="form-text">This brief bio appears on the homepage</div>
+                        </div>
+                        
+                        <!-- About Page Text -->
+                        <div class="mb-3">
+                            {{ form.about_text.label(class="form-label") }}
+                            {{ form.about_text(class="form-control", rows=10) }}
+                            <div class="form-text">This full text appears on the About page. You can include YouTube URLs (https://www.youtube.com/watch?v=VIDEO_ID) and they will be automatically embedded.</div>
                         </div>
                         
                         <!-- Email -->
